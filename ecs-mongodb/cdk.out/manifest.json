@@ -1,0 +1,341 @@
+{
+  "version": "30.0.0",
+  "artifacts": {
+    "projen-test-dev.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "projen-test-dev.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "projen-test-dev": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://647000908054/eu-central-1",
+      "properties": {
+        "templateFile": "projen-test-dev.template.json",
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::647000908054:role/cdk-hnb659fds-deploy-role-647000908054-eu-central-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::647000908054:role/cdk-hnb659fds-cfn-exec-role-647000908054-eu-central-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-647000908054-eu-central-1/ea68c4e908f97b71071b50f9dff82c67543b931f3ccf048d876639883df8539f.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "projen-test-dev.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::647000908054:role/cdk-hnb659fds-lookup-role-647000908054-eu-central-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "projen-test-dev.assets"
+      ],
+      "metadata": {
+        "/projen-test-dev/Vpc/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "Vpc8378EB38"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet1Subnet2BB74ED7"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet1RouteTable15C15F8E"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet1RouteTableAssociation4E83B6E4"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet1DefaultRouteB88F9E93"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet1/EIP": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet1EIP411541E6"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet1/NATGateway": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet1NATGatewayA036E8A6"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet2SubnetE34B022A"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet2RouteTableC5A6DF77"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet2RouteTableAssociationCCE257FF"
+          }
+        ],
+        "/projen-test-dev/Vpc/publicSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcpublicSubnet2DefaultRoute732F0BEB"
+          }
+        ],
+        "/projen-test-dev/Vpc/privateSubnet1/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcprivateSubnet1SubnetCEAD3716"
+          }
+        ],
+        "/projen-test-dev/Vpc/privateSubnet1/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcprivateSubnet1RouteTable1979EACB"
+          }
+        ],
+        "/projen-test-dev/Vpc/privateSubnet1/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcprivateSubnet1RouteTableAssociationEEBD93CE"
+          }
+        ],
+        "/projen-test-dev/Vpc/privateSubnet1/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcprivateSubnet1DefaultRouteB506891A"
+          }
+        ],
+        "/projen-test-dev/Vpc/privateSubnet2/Subnet": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcprivateSubnet2Subnet2DE7549C"
+          }
+        ],
+        "/projen-test-dev/Vpc/privateSubnet2/RouteTable": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcprivateSubnet2RouteTable4D0FFC8C"
+          }
+        ],
+        "/projen-test-dev/Vpc/privateSubnet2/RouteTableAssociation": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcprivateSubnet2RouteTableAssociationB691E645"
+          }
+        ],
+        "/projen-test-dev/Vpc/privateSubnet2/DefaultRoute": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcprivateSubnet2DefaultRouteBAC3C1C3"
+          }
+        ],
+        "/projen-test-dev/Vpc/IGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcIGWD7BA715C"
+          }
+        ],
+        "/projen-test-dev/Vpc/VPCGW": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "VpcVPCGWBF912B6E"
+          }
+        ],
+        "/projen-test-dev/Cluster/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterEB0386A7"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup": [
+          {
+            "type": "aws:cdk:warning",
+            "data": "desiredCapacity has been configured. Be aware this will reset the size of your AutoScalingGroup on every deployment. See https://github.com/aws/aws-cdk/issues/5215",
+            "trace": [
+              "Annotations.addMessage (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/aws-cdk-lib/core/lib/annotations.js:1:1071)",
+              "Annotations.addWarning (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/aws-cdk-lib/core/lib/annotations.js:1:504)",
+              "new AutoScalingGroup (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/aws-cdk-lib/aws-autoscaling/lib/auto-scaling-group.js:1:13642)",
+              "Cluster.addCapacity (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/aws-cdk-lib/aws-ecs/lib/cluster.js:1:7138)",
+              "new MyStack (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/src/main.ts:24:13)",
+              "Object.<anonymous> (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/src/main.ts:88:1)",
+              "Module._compile (node:internal/modules/cjs/loader:1246:14)",
+              "Module.m._compile (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/ts-node/src/index.ts:1618:23)",
+              "Module._extensions..js (node:internal/modules/cjs/loader:1300:10)",
+              "Object.require.extensions.<computed> [as .ts] (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/ts-node/src/index.ts:1621:12)",
+              "Module.load (node:internal/modules/cjs/loader:1103:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:942:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)",
+              "phase4 (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/ts-node/src/bin.ts:649:14)",
+              "bootstrap (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/ts-node/src/bin.ts:95:10)",
+              "main (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/ts-node/src/bin.ts:55:10)",
+              "Object.<anonymous> (/Users/dg05872/workspace/cdk-examples/ecs-mongodb/node_modules/ts-node/src/bin.ts:800:3)",
+              "Module._compile (node:internal/modules/cjs/loader:1246:14)",
+              "Object.Module._extensions..js (node:internal/modules/cjs/loader:1300:10)",
+              "Module.load (node:internal/modules/cjs/loader:1103:32)",
+              "Function.Module._load (node:internal/modules/cjs/loader:942:12)",
+              "Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:83:12)",
+              "node:internal/main/run_main_module:23:47"
+            ]
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/InstanceSecurityGroup/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupInstanceSecurityGroup1D15236A"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/InstanceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupInstanceRole9A14B384"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/InstanceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupInstanceRoleDefaultPolicy06157A81"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/InstanceProfile": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupInstanceProfile2BB4FE55"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/LaunchConfig": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupLaunchConfig81EA5466"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/ASG": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupASG0F98E147"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/DrainECSHook/Function/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRole2AC250B1"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/DrainECSHook/Function/ServiceRole/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionServiceRoleDefaultPolicy221F6E5E"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/DrainECSHook/Function/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionFE918865"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/DrainECSHook/Function/AllowInvoke:projentestdevClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic8350C259": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionAllowInvokeprojentestdevClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopic8350C2598C7ED730"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/DrainECSHook/Function/Topic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupDrainECSHookFunctionTopic3B6438EC"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/LifecycleHookDrainHook/Topic/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookTopicFE5437FB"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/LifecycleHookDrainHook/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRole70201663"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/LifecycleHookDrainHook/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHookRoleDefaultPolicyFFFD6EA5"
+          }
+        ],
+        "/projen-test-dev/Cluster/DefaultAutoScalingGroup/LifecycleHookDrainHook/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ClusterDefaultAutoScalingGroupLifecycleHookDrainHook4A9A4325"
+          }
+        ],
+        "/projen-test-dev/SsmParameterValue:--aws--service--ecs--optimized-ami--amazon-linux-2--recommended--image_id:C96584B6-F00A-464E-AD19-53AFF4B05118.Parameter": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "SsmParameterValueawsserviceecsoptimizedamiamazonlinux2recommendedimageidC96584B6F00A464EAD1953AFF4B05118Parameter"
+          }
+        ],
+        "/projen-test-dev/MongoDB/TaskRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MongoDBTaskRole93BA8D04"
+          }
+        ],
+        "/projen-test-dev/MongoDB/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MongoDB469701C9"
+          }
+        ],
+        "/projen-test-dev/MongoDBService/Service": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MongoDBService40D664AF"
+          }
+        ],
+        "/projen-test-dev/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/projen-test-dev/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/projen-test-dev/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "projen-test-dev"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

@@ -1,0 +1,352 @@
+{
+ "Resources": {
+  "DetectInsecureSGPortsServiceRole71C501C6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     },
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSConfigRulesExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/DetectInsecureSGPorts/ServiceRole/Resource"
+   }
+  },
+  "DetectInsecureSGPortsAABEFA56": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-647000908054-eu-central-1",
+     "S3Key": "893a24c1c5385141fa0928a11acbeb15fcf572b1dc64787fac9fbff930800b33.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "DetectInsecureSGPortsServiceRole71C501C6",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "Runtime": "nodejs16.x"
+   },
+   "DependsOn": [
+    "DetectInsecureSGPortsServiceRole71C501C6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/DetectInsecureSGPorts/Resource",
+    "aws:asset:path": "/Users/dg05872/workspace/cdk-examples/aws-config-remediation",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "DetectInsecureSGPortsCustomRulePermissionS6m25oyH2IYBfITXkRwffqyEsf3vNPMERyLvIFM81260980": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "DetectInsecureSGPortsAABEFA56",
+      "Arn"
+     ]
+    },
+    "Principal": "config.amazonaws.com",
+    "SourceAccount": "647000908054"
+   },
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/DetectInsecureSGPorts/CustomRulePermissionS6--m25oyH2IYBf--ITXkRwf--fqyEsf3v+NPMERyLvIFM="
+   }
+  },
+  "CheckSecureSGPortsConfigRule206EE4A1": {
+   "Type": "AWS::Config::ConfigRule",
+   "Properties": {
+    "Source": {
+     "Owner": "CUSTOM_LAMBDA",
+     "SourceDetails": [
+      {
+       "EventSource": "aws.config",
+       "MessageType": "ConfigurationItemChangeNotification"
+      },
+      {
+       "EventSource": "aws.config",
+       "MessageType": "OversizedConfigurationItemChangeNotification"
+      }
+     ],
+     "SourceIdentifier": {
+      "Fn::GetAtt": [
+       "DetectInsecureSGPortsAABEFA56",
+       "Arn"
+      ]
+     }
+    },
+    "Scope": {
+     "ComplianceResourceTypes": [
+      "AWS::EC2::SecurityGroup"
+     ]
+    }
+   },
+   "DependsOn": [
+    "DetectInsecureSGPortsCustomRulePermissionS6m25oyH2IYBfITXkRwffqyEsf3vNPMERyLvIFM81260980",
+    "DetectInsecureSGPortsAABEFA56",
+    "DetectInsecureSGPortsServiceRole71C501C6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/CheckSecureSGPortsConfigRule/Resource"
+   }
+  },
+  "CheckSecureSGPortsConfigRuleCheckSecureSGPortsNonCompliant5D8DC80D": {
+   "Type": "AWS::Events::Rule",
+   "Properties": {
+    "EventPattern": {
+     "source": [
+      "aws.config"
+     ],
+     "detail": {
+      "configRuleName": [
+       {
+        "Ref": "CheckSecureSGPortsConfigRule206EE4A1"
+       }
+      ]
+     },
+     "detail-type": [
+      "Config Rules Compliance Change"
+     ]
+    },
+    "State": "ENABLED",
+    "Targets": [
+     {
+      "Arn": {
+       "Ref": "CheckSecureSGPortsTopicDE6AE55B"
+      },
+      "Id": "Target0"
+     }
+    ]
+   },
+   "DependsOn": [
+    "DetectInsecureSGPortsCustomRulePermissionS6m25oyH2IYBfITXkRwffqyEsf3vNPMERyLvIFM81260980",
+    "DetectInsecureSGPortsAABEFA56",
+    "DetectInsecureSGPortsServiceRole71C501C6"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/CheckSecureSGPortsConfigRule/CheckSecureSGPortsNonCompliant/Resource"
+   }
+  },
+  "CheckSecureSGPortsTopicDE6AE55B": {
+   "Type": "AWS::SNS::Topic",
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/CheckSecureSGPortsTopic/Resource"
+   }
+  },
+  "CheckSecureSGPortsTopicPolicyF9A4474E": {
+   "Type": "AWS::SNS::TopicPolicy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sns:Publish",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "events.amazonaws.com"
+       },
+       "Resource": {
+        "Ref": "CheckSecureSGPortsTopicDE6AE55B"
+       },
+       "Sid": "0"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Topics": [
+     {
+      "Ref": "CheckSecureSGPortsTopicDE6AE55B"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/CheckSecureSGPortsTopic/Policy/Resource"
+   }
+  },
+  "DeleteInsecureSGServiceRoleEC150F2D": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/DeleteInsecureSG/ServiceRole/Resource"
+   }
+  },
+  "DeleteInsecureSG57F33CF7": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-647000908054-eu-central-1",
+     "S3Key": "33cdd1a9bee9b40d2a0ed8b40ad3ea6c8abf463711f5ac660dd47bdb2d1a50c9.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "DeleteInsecureSGServiceRoleEC150F2D",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
+     }
+    },
+    "Handler": "index.handler",
+    "Runtime": "nodejs16.x"
+   },
+   "DependsOn": [
+    "DeleteInsecureSGServiceRoleEC150F2D"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/DeleteInsecureSG/Resource",
+    "aws:asset:path": "/Users/dg05872/workspace/cdk-examples/aws-config-remediation",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "DeleteInsecureSGAllowInvokeawsconfigremediationdevCheckSecureSGPortsTopic96FFDE01135681B7": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "DeleteInsecureSG57F33CF7",
+      "Arn"
+     ]
+    },
+    "Principal": "sns.amazonaws.com",
+    "SourceArn": {
+     "Ref": "CheckSecureSGPortsTopicDE6AE55B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/DeleteInsecureSG/AllowInvoke:awsconfigremediationdevCheckSecureSGPortsTopic96FFDE01"
+   }
+  },
+  "DeleteInsecureSGCheckSecureSGPortsTopicDFD97150": {
+   "Type": "AWS::SNS::Subscription",
+   "Properties": {
+    "Protocol": "lambda",
+    "TopicArn": {
+     "Ref": "CheckSecureSGPortsTopicDE6AE55B"
+    },
+    "Endpoint": {
+     "Fn::GetAtt": [
+      "DeleteInsecureSG57F33CF7",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/DeleteInsecureSG/CheckSecureSGPortsTopic/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/02QQW/DIAyFf0vvxFs3KdKOa6UdqyrtPSLEjZwEqGJoNSH++wi01S48v8/WA/wBdQ3bjbxzpfqpmqmDcHJSTSKhNsxSd71sje1xZDhk+fFGObJGkNQQGjuj2F/MqlHwZyuZ0TF8r5I87Lya0O0koyhpENL4KyTVR1w0MScXhbLmQkMa8eysbnwJ32e6uijwhiblh2evUDYJne2V1MpKkc+jnUn9vuDDnnzHaqHr8wn/fYyiQbZ+USjyL9I+BjJDvuzRiGJdCYz8dtt+QQ3vm5GJqsUbRxqhKfoHQLkWo10BAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "aws-config-remediation-dev/CDKMetadata/Default"
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
