@@ -1,0 +1,194 @@
+---
+Resources:
+  BackupVaultKey6DBC0EC5:
+    Type: AWS::KMS::Key
+    Properties:
+      KeyPolicy:
+        Statement:
+        - Action: kms:*
+          Effect: Allow
+          Principal:
+            AWS:
+              Fn::Join:
+              - ''
+              - - 'arn:'
+                - Ref: AWS::Partition
+                - ":iam::612634907069:root"
+          Resource: "*"
+        Version: '2012-10-17'
+      EnableKeyRotation: true
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: aws-backup-dev/BackupVaultKey/Resource
+  BackupVault3A9C5852:
+    Type: AWS::Backup::BackupVault
+    Properties:
+      BackupVaultName: MyBackupVault
+      EncryptionKeyArn:
+        Fn::GetAtt:
+        - BackupVaultKey6DBC0EC5
+        - Arn
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Metadata:
+      aws:cdk:path: aws-backup-dev/BackupVault/Resource
+  Daily35DayRetention7B1AEBD2:
+    Type: AWS::Backup::BackupPlan
+    Properties:
+      BackupPlan:
+        BackupPlanName: Daily35DayRetention
+        BackupPlanRule:
+        - Lifecycle:
+            DeleteAfterDays: 35
+          RuleName: Daily
+          ScheduleExpression: cron(0 5 * * ? *)
+          TargetBackupVault:
+            Fn::GetAtt:
+            - BackupVault3A9C5852
+            - BackupVaultName
+    Metadata:
+      aws:cdk:path: aws-backup-dev/Daily35DayRetention/Resource
+  Daily35DayRetentionRDSBackupSelectorRole8657D3DF:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: backup.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+      - Fn::Join:
+        - ''
+        - - 'arn:'
+          - Ref: AWS::Partition
+          - ":iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+    Metadata:
+      aws:cdk:path: aws-backup-dev/Daily35DayRetention/RDSBackupSelector/Role/Resource
+  Daily35DayRetentionRDSBackupSelectorBE84F123:
+    Type: AWS::Backup::BackupSelection
+    Properties:
+      BackupPlanId:
+        Fn::GetAtt:
+        - Daily35DayRetention7B1AEBD2
+        - BackupPlanId
+      BackupSelection:
+        IamRoleArn:
+          Fn::GetAtt:
+          - Daily35DayRetentionRDSBackupSelectorRole8657D3DF
+          - Arn
+        ListOfTags:
+        - ConditionKey: rpo
+          ConditionType: STRINGEQUALS
+          ConditionValue: 24h
+        Resources:
+        - arn:aws:rds:*:612634907069:db:*
+        SelectionName: RDSBackupSelector
+    Metadata:
+      aws:cdk:path: aws-backup-dev/Daily35DayRetention/RDSBackupSelector/Resource
+  Daily35DayRetentionEFSBackupSelectorRoleDCD82E1A:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: backup.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+      - Fn::Join:
+        - ''
+        - - 'arn:'
+          - Ref: AWS::Partition
+          - ":iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+    Metadata:
+      aws:cdk:path: aws-backup-dev/Daily35DayRetention/EFSBackupSelector/Role/Resource
+  Daily35DayRetentionEFSBackupSelector0B2BD963:
+    Type: AWS::Backup::BackupSelection
+    Properties:
+      BackupPlanId:
+        Fn::GetAtt:
+        - Daily35DayRetention7B1AEBD2
+        - BackupPlanId
+      BackupSelection:
+        IamRoleArn:
+          Fn::GetAtt:
+          - Daily35DayRetentionEFSBackupSelectorRoleDCD82E1A
+          - Arn
+        ListOfTags:
+        - ConditionKey: rpo
+          ConditionType: STRINGEQUALS
+          ConditionValue: 24h
+        Resources:
+        - arn:aws:elasticfilesystem:*:612634907069:file-system/*
+        SelectionName: EFSBackupSelector
+    Metadata:
+      aws:cdk:path: aws-backup-dev/Daily35DayRetention/EFSBackupSelector/Resource
+  Daily35DayRetentionEBSBackupSelectorRole3D2F8646:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Action: sts:AssumeRole
+          Effect: Allow
+          Principal:
+            Service: backup.amazonaws.com
+        Version: '2012-10-17'
+      ManagedPolicyArns:
+      - Fn::Join:
+        - ''
+        - - 'arn:'
+          - Ref: AWS::Partition
+          - ":iam::aws:policy/service-role/AWSBackupServiceRolePolicyForBackup"
+    Metadata:
+      aws:cdk:path: aws-backup-dev/Daily35DayRetention/EBSBackupSelector/Role/Resource
+  Daily35DayRetentionEBSBackupSelector587A2FD1:
+    Type: AWS::Backup::BackupSelection
+    Properties:
+      BackupPlanId:
+        Fn::GetAtt:
+        - Daily35DayRetention7B1AEBD2
+        - BackupPlanId
+      BackupSelection:
+        IamRoleArn:
+          Fn::GetAtt:
+          - Daily35DayRetentionEBSBackupSelectorRole3D2F8646
+          - Arn
+        ListOfTags:
+        - ConditionKey: rpo
+          ConditionType: STRINGEQUALS
+          ConditionValue: 24h
+        Resources:
+        - arn:aws:ec2:*:612634907069:volume/*
+        SelectionName: EBSBackupSelector
+    Metadata:
+      aws:cdk:path: aws-backup-dev/Daily35DayRetention/EBSBackupSelector/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAA/02Pyw7CIBREv8U9vT4WjW516cbQxK2h9JpQXqaAxhD+XShGuzozc1azg3YPmxV7uYYPslGih9h5xiXJ0y1K7SCe8U1Od5ORSJ9VeEA8zryyoHxxy1rzRTHzN3OrsUOF3Au7sL8pEcE0RGoVFluYEqHobJh4nb45EWMHhNGtn9sDtPnC6IRopmC80Ai08gMQLQlj3gAAAA==
+    Metadata:
+      aws:cdk:path: aws-backup-dev/CDKMetadata/Default
+Parameters:
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: "/cdk-bootstrap/hnb659fds/version"
+    Description: Version of the CDK Bootstrap resources in this environment, automatically
+      retrieved from SSM Parameter Store. [cdk:skip]
+Rules:
+  CheckBootstrapVersion:
+    Assertions:
+    - Assert:
+        Fn::Not:
+        - Fn::Contains:
+          - - '1'
+            - '2'
+            - '3'
+            - '4'
+            - '5'
+          - Ref: BootstrapVersion
+      AssertDescription: CDK bootstrap stack version 6 required. Please run 'cdk bootstrap'
+        with a recent version of the CDK CLI.
